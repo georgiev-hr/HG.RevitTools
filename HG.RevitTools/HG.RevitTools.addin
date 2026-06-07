@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>HG.RevitTools</Name>
+		<Assembly>C:\RevitAddins\HG.RevitTools\HG.RevitTools.dll</Assembly>
+		<AddInId>8D83C886-B739-4ACD-A9DB-3E7F4E3F6C2A</AddInId>
+		<FullClassName>HG.RevitTools.App</FullClassName>
+		<VendorId>MYCOMPANY</VendorId>
+	</AddIn>
+</RevitAddIns>
