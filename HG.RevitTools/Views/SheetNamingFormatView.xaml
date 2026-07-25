@@ -1,0 +1,90 @@
+﻿<Window x:Class="HG.RevitTools.Views.SheetNamingFormatView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sheet Naming Format"
+        Width="520"
+        Height="430"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="14"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Sheet name format"
+                   FontSize="16"
+                   FontWeight="SemiBold"/>
+
+        <TextBox Grid.Row="2"
+                 Text="{Binding Template, UpdateSourceTrigger=PropertyChanged}"
+                 Height="28"
+                 VerticalContentAlignment="Center"/>
+
+        <TextBlock Grid.Row="4"
+                   Text="Available tokens"
+                   FontWeight="SemiBold"/>
+
+        <ListBox Grid.Row="6"
+                 ItemsSource="{Binding AvailableTokens}"
+                 Height="220"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding Token}"
+                                   FontWeight="SemiBold"/>
+
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="{Binding Description}"
+                                       TextWrapping="Wrap"/>
+
+                            <TextBlock Text="{Binding Example}"
+                                       Foreground="Gray"
+                                       FontSize="11"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListBox>
+
+        <StackPanel Grid.Row="8"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button Content="OK"
+                    Width="80"
+                    Height="28"
+                    Margin="0,0,8,0"
+                    IsDefault="True"
+                    Click="Ok"/>
+
+            <Button Content="Cancel"
+                    Width="80"
+                    Height="28"
+                    IsCancel="True"
+                    Click="Cancel"/>
+
+        </StackPanel>
+
+    </Grid>
+</Window>

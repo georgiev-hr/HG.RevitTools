@@ -38,8 +38,8 @@ namespace HG.RevitTools
             PushButton button = panel.AddItem(buttonData) as PushButton;
 
             // Assign images
-            button.LargeImage = LoadImage("HG.RevitTools.Resources.Images.BigButton.png");
-            button.Image = LoadImage("HG.RevitTools.Resources.Images.SmallButton.png");
+            button.LargeImage = LoadLargeImage("HG.RevitTools.Resources.Images.BigButton.png");
+            button.Image = LoadSmallImage("HG.RevitTools.Resources.Images.SmallButton.png");
 
             button.ToolTip = "Collect and select Scope Boxes.";
 
@@ -47,32 +47,84 @@ namespace HG.RevitTools
             PushButtonData buttonData2 = new PushButtonData(
                 "CreateSheetsButton",
                 "Create Sheets",
-                assemblyPath,
-                // to do: Create second IExternalCommand to launch
+                assemblyPath,                
                 "HG.RevitTools.Commands.CreateSheetsCommand"
             );
 
             PushButton button2 = panel.AddItem(buttonData2) as PushButton;
-            button2.LargeImage = LoadImage("HG.RevitTools.Resources.Images.BigButton.png");
-            button2.Image = LoadImage("HG.RevitTools.Resources.Images.SmallButton.png");
+            button2.LargeImage = LoadLargeImage("HG.RevitTools.Resources.Images.BigButton.png");
+            button2.Image = LoadSmallImage("HG.RevitTools.Resources.Images.SmallButton.png");
             button2.ToolTip = "Create Sheets from selected Views.";
 
+
+            // -------- Third button --------
+            PushButtonData buttonData3 = new PushButtonData(
+                "AdjustLuminaireHeight",
+                "Adjust Height",
+                assemblyPath,                
+                "HG.RevitTools.Commands.AdjustLuminaireHeight.AdjustLuminaireHeightCommand"
+            );
+
+            PushButton button3 = panel.AddItem(buttonData3) as PushButton;
+            button3.LargeImage = LoadLargeImage("HG.RevitTools.Resources.Images.BigButton.png");
+            button3.Image = LoadSmallImage("HG.RevitTools.Resources.Images.SmallButton.png");
+            button3.ToolTip = "Adjust selected luminaires to a picked host or linked face.";
+
+            // -------- Fourth button --------
+            PushButtonData buttonData4 = new PushButtonData(
+                "CheckParameters",
+                "Compare Parameters",
+                assemblyPath,
+                "HG.RevitTools.Commands.ParameterChecker.CheckLightingFixtureParametersCommand"
+            );
+
+            PushButton button4 = panel.AddItem(buttonData4) as PushButton;
+            button4.LargeImage = LoadLargeImage("HG.RevitTools.Resources.Images.BigButton.png");
+            button4.Image = LoadSmallImage("HG.RevitTools.Resources.Images.SmallButton.png");
+            button4.ToolTip = "Adjust selected luminaires to a picked host or linked face.";
 
 
             return Result.Succeeded;
         }
 
-        private System.Windows.Media.Imaging.BitmapImage LoadImage(string resourcePath)
+        private System.Windows.Media.Imaging.BitmapImage LoadLargeImage(
+    string resourcePath)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var stream = assembly.GetManifestResourceStream(resourcePath);
+            return LoadImage(resourcePath, 32);
+        }
 
-            var image = new System.Windows.Media.Imaging.BitmapImage();
-            image.BeginInit();
-            image.StreamSource = stream;
-            image.EndInit();
+        private System.Windows.Media.Imaging.BitmapImage LoadSmallImage(
+            string resourcePath)
+        {
+            return LoadImage(resourcePath, 16);
+        }
 
-            return image;
+        private System.Windows.Media.Imaging.BitmapImage LoadImage(
+            string resourcePath,
+            int pixelSize)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            using (var stream = assembly.GetManifestResourceStream(resourcePath))
+            {
+                if (stream == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Could not find embedded resource: {resourcePath}");
+                }
+
+                var image = new System.Windows.Media.Imaging.BitmapImage();
+
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.DecodePixelWidth = pixelSize;
+                image.DecodePixelHeight = pixelSize;
+                image.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                image.EndInit();
+                image.Freeze();
+
+                return image;
+            }
         }
 
         public Result OnShutdown(UIControlledApplication application)

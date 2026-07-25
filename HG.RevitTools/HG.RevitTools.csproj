@@ -56,20 +56,74 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\App.cs" />
-    <Compile Include="Commands\CreateSheetsCommand.cs" />
-    <Compile Include="Commands\CreateViewsFromScopeBoxesCommand.cs" />
-    <Compile Include="Model\ScopeBoxViewCreator.cs" />
-    <Compile Include="Model\SheetNameGenerator.cs" />
+    <Compile Include="Commands\AdjustLuminaireHeight\AdjustLuminaireHeightCommand.cs" />
+    <Compile Include="Commands\ParameterChecker\CommonParameterCommand.cs" />
+    <Compile Include="Commands\SheetCreator\CreateSheetsCommand.cs" />
+    <Compile Include="Commands\ScopeBoxViews\CreateViewsFromScopeBoxesCommand.cs" />
+    <Compile Include="Models\AdjustLuminaireHeight\TargetGeometrySelectionResult.cs" />
+    <Compile Include="Models\AdjustLuminaireHeight\HeightAdjustmentResult.cs" />
+    <Compile Include="Models\ParameterChecker\ParameterCheckResult.cs" />
+    <Compile Include="Models\ParameterChecker\ParameterOption.cs" />
+    <Compile Include="Models\ParameterChecker\ParameterValueData.cs" />
+    <Compile Include="Models\ParameterChecker\ParameterValueOption.cs" />
+    <Compile Include="Models\SheetCreator\SheetCreationResult.cs" />
+    <Compile Include="Models\SheetCreator\SheetNamingToken.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\HeightTargets\CurvedGeometryHeightTargetProvider.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\HeightTargets\IHeightTargetProvider.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\HeightTargets\PlanarFaceHeightTargetProvider.cs" />
+    <Compile Include="Models\AdjustLuminaireHeight\LuminaireHeightData.cs" />
+    <Compile Include="Models\AdjustLuminaireHeight\TargetPlaneInfo.cs" />
+    <Compile Include="Models\ScopeBoxViews\ScopeBoxViewCreationResult.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\TargetGeometryFilterService.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\TargetGeometrySelectionService.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\View3DService.cs" />
+    <Compile Include="Services\ParameterChecker\CommonParameterService.cs" />
+    <Compile Include="Services\ParameterChecker\FailedElementSelectionService.cs" />
+    <Compile Include="Services\ParameterChecker\LightingFixtureCollectorService.cs" />
+    <Compile Include="Services\ParameterChecker\ParameterComparisonService.cs" />
+    <Compile Include="Services\ParameterChecker\ParameterValueService.cs" />
+    <Compile Include="Services\ScopeBoxViews\ScopeBoxViewCreationService.cs" />
+    <Compile Include="Services\SheetCreator\ScopeBoxService.cs" />
+    <Compile Include="Services\SheetCreator\SheetCreationService.cs" />
+    <Compile Include="Services\SheetCreator\SheetNamingDataService.cs" />
+    <Compile Include="Services\SheetCreator\SheetNamingService.cs" />
+    <Compile Include="Models\SheetCreator\SheetNamingData.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\FaceSelectionService.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\HeightCalculationService.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\LightingFixtureSelectionFilter.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\LuminaireSelectionService.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\LuminaireHeightParameterService.cs" />
+    <Compile Include="Services\AdjustLuminaireHeight\PlaneCreationService.cs" />
     <Compile Include="Services\RevitElementCollectorService.cs" />
-    <Compile Include="View\ElementSelector.xaml.cs">
+    <Compile Include="Services\ScopeBoxViews\ScopeBoxViewNamingService.cs" />
+    <Compile Include="Services\Shared\UnitConversionService.cs" />
+    <Compile Include="Services\SheetCreator\SheetNumberService.cs" />
+    <Compile Include="Services\SheetCreator\TitleBlockService.cs" />
+    <Compile Include="Services\SheetCreator\ViewportPlacementService.cs" />
+    <Compile Include="ViewModels\ParameterChecker\ParameterCheckerViewModel.cs" />
+    <Compile Include="ViewModels\SheetNamingFormatViewModel.cs" />
+    <Compile Include="Views\ElementSelector.xaml.cs">
       <DependentUpon>ElementSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ElementSelectorViewModel.cs" />
-    <Compile Include="ViewModel\SelectableItem.cs" />
+    <Compile Include="ViewModels\ElementSelectorViewModel.cs" />
+    <Compile Include="ViewModels\SelectableItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ParameterChecker\ParameterCheckerWindow.xaml.cs">
+      <DependentUpon>ParameterCheckerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SheetNamingFormatView.xaml.cs">
+      <DependentUpon>SheetNamingFormatView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\ElementSelector.xaml">
+    <Page Include="Views\ElementSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ParameterChecker\ParameterCheckerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SheetNamingFormatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -81,13 +135,19 @@
     <EmbeddedResource Include="Resources\Images\BigButton.png" />
     <EmbeddedResource Include="Resources\Images\SmallButton.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\ScopeBoxViews\" />
+    <Folder Include="ViewModels\SheetCreator\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-			if not exist "C:\RevitAddins\HG.RevitTools" mkdir "C:\RevitAddins\HG.RevitTools"
-			copy "$(TargetDir)HG.RevitTools.dll" "C:\RevitAddins\HG.RevitTools\"
-			copy "$(TargetDir)HG.RevitTools.pdb" "C:\RevitAddins\HG.RevitTools\"
-			copy "$(ProjectDir)HG.RevitTools.addin" "%25ProgramData%25\Autodesk\Revit\Addins\2024\"
-		</PostBuildEvent>
+    <PostBuildEvent>echo Copying DLL...
+copy /Y "$(TargetPath)" "C:\RevitAddins\HG.RevitTools\"
+
+echo Copying PDB...
+copy /Y "$(TargetDir)$(TargetName).pdb" "C:\RevitAddins\HG.RevitTools\"
+
+echo Copying ADDIN...
+copy /Y "$(ProjectDir)HG.RevitTools.addin" "%25ProgramData%25\Autodesk\Revit\Addins\2024\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
